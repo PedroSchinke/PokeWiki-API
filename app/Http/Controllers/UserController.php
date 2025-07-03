@@ -7,20 +7,10 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function store(Request $request)
+    public function getInfos(Request $request, $user_id)
     {
-        $request->validate([
-            'nome' => 'required|string',
-            'email' => 'required|email|unique:users',
-            'senha' => 'required|string',
-        ]);
+        $user = User::find($user_id);
 
-        User::create([
-            'name' => $request->get('nome'),
-            'email' => $request->get('email'),
-            'password' => $request->get('senha')
-        ]);
-
-        return response()->json('Usuário criado com sucesso!');
+        return response()->json($user);
     }
 }
