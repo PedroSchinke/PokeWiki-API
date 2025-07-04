@@ -40,15 +40,25 @@ class AuthController extends Controller
     public function logout()
     {
         auth()->logout();
-        return response()->json(['message' => 'Successfully logged out']);
+
+        return response()->json(['message' => 'Logout executado com sucesso!']);
     }
 
     protected function respondWithToken($token)
     {
+        $user = auth()->user();
+        $favoritos = $user->favoritos()->pluck('pokemon_id');
+
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
+            'expires_in' => auth()->factory()->getTTL() * 60,
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'favorites' => $favoritos,
+            ]
         ]);
     }
 }
