@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Favorito;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FavoritoController extends Controller
 {
@@ -70,10 +71,10 @@ class FavoritoController extends Controller
             'pokemon_id' => 'required|integer',
         ]);
 
-        $user = auth()->user();
+        $user = Auth::id();
 
         $favorito = Favorito::query()
-            ->where('user_id', $user->id)
+            ->where('user_id', $user)
             ->where('pokemon_id', $request->get('pokemon_id'))
             ->first();
 
@@ -84,7 +85,7 @@ class FavoritoController extends Controller
         }
 
         $favoritoCriado = Favorito::create([
-            'user_id' => $user->id,
+            'user_id' => $user,
             'pokemon_id' => $request->get('pokemon_id')
         ]);
 
